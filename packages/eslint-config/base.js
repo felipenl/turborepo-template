@@ -8,18 +8,12 @@ import globals from 'globals';
 import prettierConfig from './prettier.config.mjs';
 
 /**
- * A shared ESLint configuration for the repository.
- *
+ * Shared ESLint configuration for the monorepo.
  * @type {import("eslint").Linter.Config[]}
- * */
+ */
 export const config = [
-  // Base JS configuration
   js.configs.recommended,
-
-  // TypeScript configuration
   ...tseslint.configs.recommended,
-
-  // Global configuration
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -41,30 +35,16 @@ export const config = [
       '*.config.mjs',
     ],
   },
-
-  // Turbo configuration
   {
-    plugins: {
-      turbo: turboPlugin,
-    },
-    rules: {
-      'turbo/no-undeclared-env-vars': 'warn',
-    },
+    plugins: { turbo: turboPlugin },
+    rules: { 'turbo/no-undeclared-env-vars': 'warn' },
   },
-
-  // Prettier configuration
   {
     plugins: { prettier: prettierPlugin },
     rules: { 'prettier/prettier': ['error', prettierConfig] },
   },
-
-  // Only warn plugin
   {
-    plugins: {
-      onlyWarn,
-    },
+    plugins: { onlyWarn },
   },
-
-  // Prettier config last to override conflicting rules
   eslintConfigPrettier,
 ];

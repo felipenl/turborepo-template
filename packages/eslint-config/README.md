@@ -1,6 +1,6 @@
 # `@repo/eslint-config`
 
-This package contains shared ESLint configurations for the panellet-nutri monorepo.
+This package contains shared ESLint configurations for the turborepo template monorepo.
 
 ## Available Configurations
 

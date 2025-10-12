@@ -1,4 +1,3 @@
 #!/usr/bin/env sh
 
-# Pre-push hook to increment versions of modified projects
 node packages/version-bump/cli.js
