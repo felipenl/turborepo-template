@@ -51,7 +51,7 @@ If you want to push without triggering version bumps, you can:
 ## Files involved
 
 - `.husky/pre-push` - The Husky pre-push hook
-- `scripts/version-bump.js` - The Node.js script that handles version detection and bumping
+- `packages/version-bump/` - The dedicated package that handles version detection and bumping
 - Individual `package.json` files in apps and packages
 
 ## Example workflow

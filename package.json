@@ -9,7 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,json,js,mjs}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json,js,mjs}\"",
     "check-types": "turbo run check-types",
-    "version-bump": "node scripts/version-bump.js",
+    "version-bump": "node packages/version-bump/cli.js",
     "prepare": "husky"
   },
 
