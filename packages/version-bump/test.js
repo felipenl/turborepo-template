@@ -12,13 +12,13 @@ console.log('============================');
 console.log('\n📋 Test: Version Bump Function');
 try {
   console.log('Testing the main version bump function...');
-  
+
   const result = runVersionBump();
-  
+
   if (result.success) {
     console.log('✅ Function executed successfully');
     console.log('📦 Projects that would be versioned:', result.versionedProjects);
-    
+
     if (result.versionedProjects.length > 0) {
       console.log('🎉 Version bump would be triggered for:', result.versionedProjects.join(', '));
     } else {
