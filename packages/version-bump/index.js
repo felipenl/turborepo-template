@@ -52,21 +52,21 @@ function getModifiedProjects(changedFiles) {
  */
 function incrementProjectVersion(projectPath) {
   const packageJsonPath = path.join(projectPath, 'package.json');
-  
+
   if (!fs.existsSync(packageJsonPath)) {
     console.log(`⚠️  No package.json found for ${projectPath}, skipping`);
     return false;
   }
 
   console.log(`📦 Bumping version for ${projectPath}`);
-  
+
   try {
     // Use npm version to increment patch version
     execSync(`cd ${projectPath} && npm version patch --no-git-tag-version`, { stdio: 'inherit' });
-    
+
     // Stage the updated package.json
     execSync(`git add ${packageJsonPath}`);
-    
+
     return true;
   } catch (error) {
     console.error(`❌ Failed to bump version for ${projectPath}:`, error.message);
@@ -89,7 +89,9 @@ function commitVersionChanges(versionedProjects) {
     // If git diff --cached --quiet fails, there are staged changes
     console.log('💾 Committing version bumps...');
     const projectsList = versionedProjects.join(', ');
-    execSync(`git commit -m "chore: bump versions for ${projectsList} [skip ci]"`, { stdio: 'inherit' });
+    execSync(`git commit -m "chore: bump versions for ${projectsList} [skip ci]"`, {
+      stdio: 'inherit',
+    });
   }
 }
 
@@ -100,7 +102,7 @@ export function versionBump() {
   console.log('🔍 Checking for modified projects to version bump...');
 
   const changedFiles = getChangedFiles();
-  
+
   if (!changedFiles) {
     console.log('✅ No changes detected, skipping version bump');
     return { success: true, versionedProjects: [] };
@@ -131,7 +133,7 @@ export function versionBump() {
   commitVersionChanges(versionedProjects);
 
   console.log('✅ Version bumps complete!');
-  
+
   return { success: true, versionedProjects };
 }
 

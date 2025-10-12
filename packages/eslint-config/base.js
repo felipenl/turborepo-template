@@ -1,6 +1,5 @@
 import js from '@eslint/js';
-import ts from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import tseslint from 'typescript-eslint';
 import prettierPlugin from 'eslint-plugin-prettier';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import turboPlugin from 'eslint-plugin-turbo';
@@ -15,8 +14,13 @@ import prettierConfig from './prettier.config.mjs';
  * */
 export const config = [
   // Base JS configuration
+  js.configs.recommended,
+  
+  // TypeScript configuration
+  ...tseslint.configs.recommended,
+  
+  // Global configuration
   {
-    ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -36,25 +40,6 @@ export const config = [
       '*.config.js',
       '*.config.mjs',
     ],
-  },
-
-  // TypeScript configuration
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        project: './tsconfig.json',
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        ecmaFeatures: { jsx: true },
-      },
-    },
-    plugins: { '@typescript-eslint': ts },
-    rules: {
-      ...ts.configs.recommended.rules,
-      ...(ts.configs['recommended-type-checked']?.rules ?? {}),
-    },
   },
 
   // Turbo configuration
