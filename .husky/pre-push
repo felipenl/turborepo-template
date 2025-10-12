@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-
-node packages/version-bump/cli.js

@@ -19,6 +19,9 @@ npx @repo/version-bump
 
 # Or via the root script
 pnpm run version-bump
+
+# Test the version bump functionality
+pnpm --filter @repo/version-bump test
 ```
 
 ### Programmatic Usage

@@ -11,7 +11,8 @@
     "version-bump": "./cli.js"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "test": "node test.js"
   },
   "dependencies": {},
   "devDependencies": {}

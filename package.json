@@ -11,6 +11,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json,js,mjs}\"",
     "check-types": "turbo run check-types",
     "version-bump": "node packages/version-bump/cli.js",
+    "test:version-bump": "pnpm --filter @repo/version-bump test",
     "prepare": "husky"
   },
   "devDependencies": {

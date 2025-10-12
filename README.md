@@ -37,9 +37,9 @@ All packages include TypeScript, ESLint, and Prettier configurations.
 
 This project includes automated development workflows powered by:
 
-- **Husky**: Git hooks for pre-commit and pre-push automation
+- **Husky**: Git hooks for pre-commit and post-merge automation
 - **lint-staged**: Automatic linting and formatting of staged files
-- **Automatic versioning**: Modified packages are automatically version-bumped on push
+- **Automatic versioning**: Modified packages are automatically version-bumped on merge to master/main (supports both local merges and GitHub PR merges)
 - **Conventional commits**: Enforced commit message format
 
 ## Using This Template
@@ -88,13 +88,16 @@ pnpm check-types
 
 # Manual version bump
 pnpm version-bump
+
+# Test version bump functionality
+pnpm test:version-bump
 ```
 
 ### Git Workflow
 
 1. **Pre-commit**: Automatically lints and formats staged files
 2. **Commit message**: Validates conventional commit format
-3. **Pre-push**: Automatically bumps versions for modified packages
+3. **Post-merge**: Automatically bumps versions for modified packages when merging to master/main
 
 ## Template Features
 
@@ -104,7 +107,7 @@ pnpm version-bump
 - ✅ **Prettier**: Consistent code formatting
 - ✅ **Husky**: Git hooks for automated workflows
 - ✅ **lint-staged**: Fast, incremental linting
-- ✅ **Auto-versioning**: Automatic version bumping on push
+- ✅ **Auto-versioning**: Automatic version bumping on merge to master/main
 - ✅ **Conventional commits**: Enforced commit message format
 
 ## Template Usage

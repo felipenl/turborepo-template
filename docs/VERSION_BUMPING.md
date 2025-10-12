@@ -1,13 +1,14 @@
 # Automatic Version Bumping
 
-This monorepo includes automatic version bumping for modified packages and apps when pushing to the remote repository.
+This monorepo includes automatic version bumping for modified packages and apps when merging changes into the master/main branch.
 
 ## How it works
 
-1. **Pre-push Hook**: When you run `git push`, a pre-push hook is triggered
-2. **Change Detection**: The system detects which apps and packages have been modified since the last push
-3. **Version Increment**: Each modified project gets its patch version incremented (e.g., `0.1.0` → `0.1.1`)
-4. **Auto-commit**: The version changes are automatically committed with a message like `chore: bump versions for apps/web, packages/ui [skip ci]`
+1. **Post-merge Hook**: When you merge changes into master or main branch, a post-merge hook is triggered
+2. **GitHub Actions**: When a PR is merged via GitHub's interface, a GitHub Actions workflow automatically triggers
+3. **Change Detection**: The system detects which apps and packages have been modified in the merged changes
+4. **Version Increment**: Each modified project gets its patch version incremented (e.g., `0.1.0` → `0.1.1`)
+5. **Auto-commit**: The version changes are automatically committed with a message like `chore: version bump after merge to main [skip ci]`
 
 ## What triggers a version bump
 
