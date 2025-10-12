@@ -1,135 +1,143 @@
-# Turborepo starter
+# Turborepo Template
 
-This Turborepo starter is maintained by the Turborepo core team.
+A production-ready monorepo template with automated development workflows, comprehensive linting, formatting, and version management.
 
-## Using this example
+## Quick Start
 
-Run the following command:
+```bash
+# Clone the template
+git clone <your-repo-url> my-project
+cd my-project
 
-```sh
-npx create-turbo@latest
+# Run setup script (optional)
+./setup.sh
+
+# Install dependencies
+pnpm install
+
+# Start development
+pnpm dev
 ```
 
-## What's inside?
+## Architecture
 
-This Turborepo includes the following packages/apps:
+This monorepo is built with [Turborepo](https://turbo.build/repo) and includes automated development workflows.
 
-### Apps and Packages
+### What's Included
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **`web`**: Example Next.js application
+- **`@repo/ui`**: Shared React component library
+- **`@repo/eslint-config`**: Comprehensive ESLint configurations (base + React)
+- **`@repo/typescript-config`**: Shared TypeScript configurations  
+- **`@repo/version-bump`**: Automated version management system
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+All packages include TypeScript, ESLint, and Prettier configurations.
 
-### Utilities
+## Development Workflow
 
-This Turborepo has some additional tools already setup for you:
+This project includes automated development workflows powered by:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **Husky**: Git hooks for pre-commit and pre-push automation
+- **lint-staged**: Automatic linting and formatting of staged files
+- **Automatic versioning**: Modified packages are automatically version-bumped on push
+- **Conventional commits**: Enforced commit message format
 
-### Build
+## Using This Template
 
-To build all apps and packages, run the following command:
+1. **Clone or fork this repository**
+2. **Rename the directory** to match your project
+3. **Run the setup script** (optional): `./setup.sh`
+4. **Install dependencies**: `pnpm install`
+5. **Start developing**: `pnpm dev`
 
-```
-cd my-turborepo
+### Quick Start
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+pnpm install
 ```
 
-### Develop
+### Development Commands
 
-To develop all apps and packages, run the following command:
+```bash
+# Start all apps in development mode
+pnpm dev
 
-```
-cd my-turborepo
+# Start specific app
+pnpm dev --filter=web
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+# Build all packages
+pnpm build
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+# Build specific package
+pnpm build --filter=web
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+# Lint all packages
+pnpm lint
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+# Fix linting issues
+pnpm lint:fix
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+# Format code
+pnpm format
 
-### Remote Caching
+# Check formatting
+pnpm format:check
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+# Type check
+pnpm check-types
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Manual version bump
+pnpm version-bump
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Git Workflow
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+1. **Pre-commit**: Automatically lints and formats staged files
+2. **Commit message**: Validates conventional commit format
+3. **Pre-push**: Automatically bumps versions for modified packages
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+## Template Features
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
+- ✅ **Monorepo**: Turborepo for fast, scalable builds
+- ✅ **TypeScript**: Full type safety across all packages
+- ✅ **ESLint**: Comprehensive linting with base and React configs
+- ✅ **Prettier**: Consistent code formatting
+- ✅ **Husky**: Git hooks for automated workflows
+- ✅ **lint-staged**: Fast, incremental linting
+- ✅ **Auto-versioning**: Automatic version bumping on push
+- ✅ **Conventional commits**: Enforced commit message format
 
-## Useful Links
+## Template Usage
 
-Learn more about the power of Turborepo:
+### For GitHub Template Repository
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+1. Click "Use this template" button
+2. Create your new repository
+3. Clone and run `./setup.sh`
+
+### For Manual Setup
+
+1. Clone: `git clone <repo-url> my-project`
+2. Remove git history: `rm -rf .git && git init`
+3. Run setup: `./setup.sh`
+
+## Customization
+
+1. **Update project name** in root `package.json`
+2. **Modify apps** in `apps/` directory for your use case
+3. **Add packages** in `packages/` directory as needed
+4. **Configure ESLint** rules in `packages/eslint-config/`
+5. **Adjust git hooks** in `.husky/` if needed
+
+## Package Structure
+
+Each package follows consistent patterns:
+- `eslint.config.js` - ESLint configuration
+- `package.json` - Package metadata and scripts  
+- `tsconfig.json` - TypeScript configuration
+
+### Documentation
+
+- [Version Bumping Guide](./docs/VERSION_BUMPING.md) - Automatic version management
+- [ESLint Config](./packages/eslint-config/README.md) - Shared linting configurations
+- [Version Bump Package](./packages/version-bump/README.md) - Version management utilities
