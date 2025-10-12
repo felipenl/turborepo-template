@@ -33,6 +33,7 @@ export const config = [
       '.husky/**',
       '.turbo/**',
       '.next/**',
+      'scripts/**',
       '*.config.js',
       '*.config.mjs',
     ],
