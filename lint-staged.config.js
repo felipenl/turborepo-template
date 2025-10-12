@@ -24,7 +24,5 @@ export default {
   },
 
   // Just format other supported files
-  '(apps|packages)/**/*.(json|md)': filenames => [
-    `npx prettier --write ${filenames.join(' ')}`,
-  ],
+  '(apps|packages)/**/*.(json|md)': filenames => [`npx prettier --write ${filenames.join(' ')}`],
 };

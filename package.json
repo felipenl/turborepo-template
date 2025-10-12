@@ -13,7 +13,6 @@
     "version-bump": "node packages/version-bump/cli.js",
     "prepare": "husky"
   },
-
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",

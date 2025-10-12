@@ -12,6 +12,7 @@ This monorepo includes automatic version bumping for modified packages and apps 
 ## What triggers a version bump
 
 Any changes to files within:
+
 - `apps/[app-name]/` directories
 - `packages/[package-name]/` directories
 
@@ -30,6 +31,7 @@ This will check for changes and bump versions accordingly.
 If you want to push without triggering version bumps, you can:
 
 1. **Skip the pre-push hook entirely:**
+
    ```bash
    git push --no-verify
    ```

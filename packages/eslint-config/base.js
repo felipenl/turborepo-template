@@ -15,10 +15,10 @@ import prettierConfig from './prettier.config.mjs';
 export const config = [
   // Base JS configuration
   js.configs.recommended,
-  
+
   // TypeScript configuration
   ...tseslint.configs.recommended,
-  
+
   // Global configuration
   {
     languageOptions: {
