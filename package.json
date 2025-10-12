@@ -9,17 +9,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md,json,js,mjs}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,json,js,mjs}\"",
     "check-types": "turbo run check-types",
+    "version-bump": "node scripts/version-bump.js",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,mjs}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.{md,json}": [
-      "prettier --write"
-    ]
-  },
+
   "devDependencies": {
     "husky": "^9.1.7",
     "lint-staged": "^16.2.4",
