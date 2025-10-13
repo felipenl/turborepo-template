@@ -24,19 +24,10 @@ jobs:
           # Use a token that can push to protected branches if needed
           token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.0.0
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'pnpm'
-      
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
       
       - name: Configure git
         run: |
@@ -47,35 +38,12 @@ jobs:
         run: |
           echo "🔄 Running version bump after PR merge to ${{ github.event.pull_request.base.ref }}"
           
-          # Create a custom Node.js script to handle PR version bumping
-          cat << 'EOF' > version-bump-pr.js
-          import { runVersionBumpForPR } from './packages/version-bump/index.js';
+          ./scripts/version-bump.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
           
-          const baseSha = '${{ github.event.pull_request.base.sha }}';
-          const headSha = '${{ github.event.pull_request.head.sha }}';
-          
-          console.log(`Base SHA: ${baseSha}`);
-          console.log(`Head SHA: ${headSha}`);
-          
-          const result = runVersionBumpForPR(baseSha, headSha);
-          process.exit(result.success ? 0 : 1);
-          EOF
-          
-          # Run the version bump script
-          if node version-bump-pr.js; then
-            # Check if version bump created any changes
-            if [ -n "$(git status --porcelain)" ]; then
-              echo "📦 Version bump created changes, committing..."
-              git add .
-              git commit -m "chore: version bump after PR #${{ github.event.pull_request.number }} merge [skip ci]"
-              git push origin ${{ github.event.pull_request.base.ref }}
-              echo "✅ Version bump committed and pushed"
-            else
-              echo "✅ No version changes needed"
-            fi
-          else
-            echo "⚠️ Version bump failed"
-            exit 1
+          # Push changes if any were made
+          if ! git diff --quiet HEAD~1..HEAD; then
+            echo "� Pushing version bump changes"
+            git push origin ${{ github.event.pull_request.base.ref }}
           fi
       
       - name: Comment on PR

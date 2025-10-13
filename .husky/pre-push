@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "main" ]; then
+    echo "🔄 Pre-push on $CURRENT_BRANCH detected"
+    ./scripts/version-bump.sh
+else
+    echo "ℹ️  Skipping version bump (not on main/master)"
+fi
