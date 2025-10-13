@@ -1,13 +1,15 @@
 #!/usr/bin/env sh
 
 # Version bump script for monorepo
-# Usage: ./scripts/version-bump.sh [base_sha] [head_sha]
+# Usage: ./scripts/version-bump.sh [base_sha] [head_sha] [--commit]
 # If no SHAs provided, uses git diff to detect changes
+# Use --commit flag to auto-commit changes (for hooks)
 
 set -e
 
 BASE_SHA=${1:-""}
 HEAD_SHA=${2:-""}
+AUTO_COMMIT=${3:-""}
 
 echo "🔄 Running version bump..."
 
@@ -42,11 +44,13 @@ if [ -n "$CHANGED_FILES" ]; then
             fi
         done
         
-        if ! git diff --cached --quiet; then
+        if [ "$AUTO_COMMIT" = "--commit" ]; then
             echo "💾 Committing version bumps..."
             git commit -m "chore: bump versions [skip ci]"
-            echo "✅ Version bump completed with changes"
-            exit 0
+            echo "✅ Version bump completed with auto-commit"
+        else
+            echo "✅ Version bumps completed and staged"
+            echo "📦 Updated versions for: $(echo "$PROJECTS" | tr '\n' ' ')"
         fi
     else
         echo "✅ No apps/packages modified"

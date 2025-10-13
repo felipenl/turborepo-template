@@ -38,7 +38,7 @@ jobs:
         run: |
           echo "🔄 Running version bump after PR merge to ${{ github.event.pull_request.base.ref }}"
           
-          ./scripts/version-bump.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }}
+          ./scripts/versioning/version-bump.sh ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} --commit
           
           # Push changes if any were made
           if ! git diff --quiet HEAD~1..HEAD; then
