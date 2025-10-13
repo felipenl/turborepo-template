@@ -16,12 +16,20 @@ if [ -n "$BASE_SHA" ] && [ -n "$HEAD_SHA" ]; then
     echo "📋 Comparing $BASE_SHA..$HEAD_SHA"
     CHANGED_FILES=$(git diff --name-only "$BASE_SHA".."$HEAD_SHA")
 else
-    echo "📋 Detecting local changes"
-    CHANGED_FILES=$(git diff --name-only @{push}..HEAD 2>/dev/null || git diff --name-only HEAD~1..HEAD 2>/dev/null || echo "")
+    echo "📋 Detecting changes to push"
+    # First check staged files, then committed but not pushed files
+    CHANGED_FILES=$(git diff --cached --name-only)
+    if [ -z "$CHANGED_FILES" ]; then
+        CHANGED_FILES=$(git diff --name-only origin/main..HEAD 2>/dev/null || git diff --name-only @{u}..HEAD 2>/dev/null || echo "")
+    fi
 fi
 
 if [ -n "$CHANGED_FILES" ]; then
-    PROJECTS=$(echo "$CHANGED_FILES" | grep -E "^(apps|packages)/" | cut -d'/' -f1,2 | sort -u)
+    echo "📄 Changed files:"
+    echo "$CHANGED_FILES"
+    
+    # Filter out non-project files and get unique projects
+    PROJECTS=$(echo "$CHANGED_FILES" | grep -E "^(apps|packages)/" | grep -v "package\.json$" | cut -d'/' -f1,2 | sort -u)
     
     if [ -n "$PROJECTS" ]; then
         echo "📝 Modified projects: $(echo "$PROJECTS" | tr '\n' ' ')"
