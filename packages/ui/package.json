@@ -6,7 +6,10 @@
     "./*": "./src/*.tsx"
   },
   "scripts": {
-    "lint": "eslint . --max-warnings 0",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "turbo run format --filter=web",
+    "format:check": "turbo run format:check --filter=web",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },

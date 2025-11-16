@@ -1,23 +1,21 @@
+// lint-staged.config.js
 export default {
-  '(apps|packages)/**/*.(ts|tsx)': () => 'pnpm run check-types',
-
   '(apps|packages)/**/*.(ts|tsx|js)': filenames => {
-    const filesByProject = filenames.reduce((acc, file) => {
-      const projectMatch = file.match(/^(apps|packages)\/([^/]+)\//);
-      if (projectMatch) {
-        const [, type, name] = projectMatch;
-        const projectPath = `${type}/${name}`;
-        if (!acc[projectPath]) acc[projectPath] = [];
-        acc[projectPath].push(file);
-      }
-      return acc;
-    }, {});
+    const projectPaths = [...new Set(
+      filenames
+        .map(file => {
+          const match = file.match(/^(apps|packages)\/[^/]+/);
+          return match ? match[0] : null;
+        })
+        .filter(Boolean) // elimina null/undefined
+    )];
 
-    return Object.entries(filesByProject).flatMap(([projectPath, files]) => [
-      `cd ${projectPath} && npx eslint --fix ${files.map(f => f.replace(`${projectPath}/`, '')).join(' ')}`,
-      `npx prettier --write ${files.join(' ')}`,
+    return projectPaths.flatMap(projectPath => [
+      `cd ${projectPath} && pnpm lint:fix`,
+      `cd ${projectPath} && pnpm format`
     ]);
   },
 
-  '(apps|packages)/**/*.(json|md)': filenames => [`npx prettier --write ${filenames.join(' ')}`],
+  '(apps|packages)/**/*.(json|md|yml|yaml)': filenames =>
+    filenames.map(file => `prettier --write ${file}`)
 };
