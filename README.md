@@ -25,13 +25,18 @@ This monorepo is built with [Turborepo](https://turbo.build/repo) and includes a
 
 ### What's Included
 
-- **`web`**: Example Next.js application
+**Apps:**
+- **`web`**: Next.js 15 application with React 19
+- **`api`**: Node.js backend API example with env validation
+
+**Packages:**
 - **`@repo/ui`**: Shared React component library
-- **`@repo/eslint-config`**: Comprehensive ESLint configurations (base + React)
-- **`@repo/typescript-config`**: Shared TypeScript configurations  
+- **`@repo/eslint-config`**: ESLint configurations (base, backend, React, Next.js)
+- **`@repo/typescript-config`**: Shared TypeScript configurations
+- **`@repo/test-config`**: Vitest testing infrastructure
 - **`@repo/version-bump`**: Automated version management system
 
-All packages include TypeScript, ESLint, and Prettier configurations.
+All apps/packages include TypeScript, ESLint, Prettier, and testing support.
 
 ## Development Workflow
 
@@ -86,11 +91,42 @@ pnpm format:check
 # Type check
 pnpm check-types
 
+# Run tests
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
 # Manual version bump
 pnpm version-bump
 
 # Test version bump functionality
 pnpm test:version-bump
+```
+
+### Environment Variables
+
+Environment variables use a **hierarchical structure**:
+- **Root `.env`** - Shared variables (database, APIs)
+- **App `.env.local`** - App-specific configuration
+
+Setup:
+```bash
+# Copy root shared env
+cp .env.example .env
+
+# Copy app-specific env
+cp apps/web/.env.example apps/web/.env.local
+cp apps/api/.env.example apps/api/.env.local
+
+# Fill in actual values
+```
+
+See [Environment Variables Guide](./docs/environment-variables.md) for complete documentation
+
 ```
 
 ### Git Workflow
@@ -103,11 +139,14 @@ pnpm test:version-bump
 
 - ✅ **Monorepo**: Turborepo for fast, scalable builds
 - ✅ **TypeScript**: Full type safety across all packages
-- ✅ **ESLint**: Comprehensive linting with base and React configs
-- ✅ **Prettier**: Consistent code formatting
+- ✅ **ESLint 9**: Flat config with base, backend, React, and Next.js presets
+- ✅ **Prettier**: Integrated code formatting
+- ✅ **Vitest**: Fast unit testing with coverage
+- ✅ **Environment Variables**: Documented .env pattern with validation
+- ✅ **CI/CD**: GitHub Actions for linting, testing, and building
 - ✅ **Husky**: Git hooks for automated workflows
-- ✅ **lint-staged**: Fast, incremental linting
-- ✅ **Auto-versioning**: Automatic version bumping on merge to master/main
+- ✅ **lint-staged**: Fast, incremental linting on commit
+- ✅ **Auto-versioning**: Automatic version bumping on merge
 - ✅ **Conventional commits**: Enforced commit message format
 
 ## Template Usage
@@ -141,6 +180,23 @@ Each package follows consistent patterns:
 
 ### Documentation
 
+- [Environment Variables Guide](./docs/environment-variables.md) - Setup and best practices
 - [Version Bumping Guide](./docs/VERSION_BUMPING.md) - Automatic version management
 - [ESLint Config](./packages/eslint-config/README.md) - Shared linting configurations
+- [Test Config](./packages/test-config/README.md) - Vitest testing setup
 - [Version Bump Package](./packages/version-bump/README.md) - Version management utilities
+
+## Before Production
+
+This template is development-ready. Before deploying to production, add:
+
+- [ ] **Dockerfile** for each app (containerization)
+- [ ] **docker-compose.yml** (orchestration)
+- [ ] **Deployment pipeline** (deploy workflow in `.github/workflows/`)
+- [ ] **Environment secrets** (use secret management, not plain env vars)
+- [ ] **Monitoring** (APM, error tracking)
+- [ ] **Security hardening** (rate limiting, CSP headers, etc.)
+- [ ] **Database migrations** (if using a database)
+- [ ] **Health checks** (liveness/readiness endpoints)
+
+For a production-ready infrastructure setup with Docker, Traefik, monitoring, and security hardening, see our [Production Deployment Guide](./docs/production-deployment.md) (if available).

@@ -1,4 +1,5 @@
-import { config as baseConfig } from './base.js';
+import type { Linter } from 'eslint';
+import { config as baseConfig } from './base.ts';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
@@ -6,9 +7,8 @@ import tanstackQuery from '@tanstack/eslint-plugin-query';
 
 /**
  * ESLint configuration for React applications.
- * @type {import("eslint").Linter.Config[]}
  */
-export const reactConfig = [
+export const reactConfig: Linter.Config[] = [
   ...baseConfig,
   {
     files: ['**/*.jsx', '**/*.tsx'],
