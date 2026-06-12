@@ -1,0 +1,52 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./clients/base": {
+      "types": "./src/clients/base.ts",
+      "default": "./src/clients/base.ts"
+    },
+    "./clients/postgres": {
+      "types": "./src/clients/postgres.ts",
+      "default": "./src/clients/postgres.ts"
+    },
+    "./schemas/main": {
+      "types": "./src/schemas/main/index.ts",
+      "default": "./src/schemas/main/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "check-types": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.3"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^25.9.2",
+    "drizzle-kit": "^0.30.1",
+    "eslint": "^9.39.4",
+    "typescript": "6.0.3"
+  },
+  "peerDependencies": {
+    "postgres": "^3.4.5"
+  },
+  "peerDependenciesMeta": {
+    "postgres": {
+      "optional": true
+    }
+  }
+}
