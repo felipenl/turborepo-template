@@ -17,7 +17,9 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@repo/observability": "workspace:*",
     "dotenv": "^17.4.2",
+    "pino": "^9.7.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {

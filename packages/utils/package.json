@@ -1,0 +1,68 @@
+{
+  "name": "@repo/utils",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./server": {
+      "types": "./src/server/index.ts",
+      "default": "./src/server/index.ts"
+    },
+    "./server/express": {
+      "types": "./src/server/express/index.ts",
+      "default": "./src/server/express/index.ts"
+    },
+    "./environment": {
+      "types": "./src/environment/index.ts",
+      "default": "./src/environment/index.ts"
+    },
+    "./string": {
+      "types": "./src/string/index.ts",
+      "default": "./src/string/index.ts"
+    },
+    "./date": {
+      "types": "./src/date/index.ts",
+      "default": "./src/date/index.ts"
+    }
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@repo/errors": "workspace:*",
+    "@repo/observability": "workspace:*",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/test-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^25.9.2",
+    "eslint": "^9.39.4",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.8"
+  },
+  "peerDependencies": {
+    "express": "^5.0.0",
+    "pino": "^9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    },
+    "pino": {
+      "optional": true
+    }
+  }
+}
