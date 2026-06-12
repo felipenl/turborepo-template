@@ -1,72 +1,181 @@
-# API App
+# API Server
 
-Example backend API application using Node.js and TypeScript.
+Modern API built with Fastify, TypeScript, and Drizzle ORM.
+
+## Stack
+
+- **Fastify**: Fast and low overhead web framework
+- **Drizzle ORM**: Type-safe database queries (@repo/database)
+- **Pino**: High-performance logging (@repo/observability)
+- **PostgreSQL**: Primary database
+- **Zod**: Schema validation
+- **TypeScript**: Type safety throughout
 
 ## Setup
 
 1. Copy environment variables:
 
-   ```bash
-   cp .env.example .env.local
-   ```
-
-2. Install dependencies (from monorepo root):
-
-   ```bash
-   pnpm install
-   ```
-
-3. Start development server:
-   ```bash
-   pnpm dev
-   ```
-
-## Environment Variables
-
-This app loads environment variables in this order:
-
-1. **Root `.env`** - Shared variables (database, external APIs)
-2. **App `.env.local`** - App-specific overrides (port, JWT secret)
-
-See `.env.example` for required variables.
-
-## Scripts
-
 ```bash
-# Development
-pnpm dev              # Start with hot reload
-
-# Build
-pnpm build            # Compile TypeScript to dist/
-pnpm start            # Run compiled code
-
-# Code Quality
-pnpm lint             # Check linting
-pnpm lint:fix         # Fix linting issues
-pnpm format           # Format code
-pnpm check-types      # Type check
-
-# Testing
-pnpm test             # Run tests
-pnpm test:watch       # Run tests in watch mode
-pnpm test:coverage    # Run tests with coverage
+cp .env.example .env
 ```
 
-## Structure
+2. Configure your database URL in `.env`:
+
+```env
+DATABASE_URL=postgresql://localhost:5432/mydb
+```
+
+3. Install dependencies:
+
+```bash
+pnpm install
+```
+
+## Development
+
+```bash
+# Start development server
+pnpm dev
+
+# Type check
+pnpm check-types
+
+# Lint
+pnpm lint
+
+# Run tests
+pnpm test
+```
+
+## Project Structure
 
 ```
 src/
 ├── config/
-│   └── environment.ts    # Env var validation with Zod
-├── index.ts              # Entry point
-└── ...
+│   └── environment.ts    # Env validation with Zod
+├── plugins/
+│   ├── database.ts       # Database connection plugin
+│   └── error-handler.ts  # Global error handling
+├── routes/
+│   └── health.ts         # Health check endpoints
+└── index.ts              # Server bootstrap
 ```
 
-## Adding a Framework
+## Endpoints
 
-Replace `src/index.ts` with your framework of choice:
+### Health Checks
 
-- **Express**: `pnpm add express @types/express`
-- **Fastify**: `pnpm add fastify`
-- **Hono**: `pnpm add hono`
-- **NestJS**: Use NestJS CLI
+```bash
+# Basic health check
+GET /health
+
+# Readiness check (includes DB connectivity)
+GET /health/ready
+```
+
+## Database
+
+This API uses `@repo/database` package with Drizzle ORM.
+
+### Add Tables
+
+1. Create schema file:
+
+```typescript
+// packages/database/src/schemas/main/users.ts
+import { pgTable, uuid, varchar, timestamp } from 'drizzle-orm/pg-core';
+
+export const users = pgTable('users', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+  name: varchar('name', { length: 255 }).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+```
+
+2. Export in schema index:
+
+```typescript
+// packages/database/src/schemas/main/index.ts
+export * from './users.js';
+import * as users from './users.js';
+
+export const mainSchema = {
+  ...users,
+};
+```
+
+3. Generate and run migrations:
+
+```bash
+cd packages/database
+pnpm db:generate
+pnpm db:migrate
+```
+
+### Use in Routes
+
+```typescript
+import { mainSchema } from '@repo/database/schemas/main';
+
+// Query
+const users = await fastify.db.select().from(mainSchema.users);
+
+// Insert
+const [user] = await fastify.db.insert(mainSchema.users).values({ email, name }).returning();
+```
+
+## Error Handling
+
+Uses `@repo/errors` custom error classes:
+
+```typescript
+import { ResponseError, AuthError } from '@repo/errors';
+
+// HTTP error
+throw new ResponseError('Not found', 404);
+
+// Auth error
+throw new AuthError('Invalid token', 401);
+
+// With data
+throw new ResponseError('Validation failed', 400, { field: 'email' });
+```
+
+## Logging
+
+Fastify uses Pino logger (from `@repo/observability`):
+
+```typescript
+fastify.log.info('Info message');
+fastify.log.error(error, 'Error occurred');
+fastify.log.debug({ user: userId }, 'Debug with context');
+```
+
+Logs are written to:
+
+- Console (pretty-printed in dev)
+- File: `logs/api.log` (rotated daily)
+
+## Production
+
+```bash
+# Build
+pnpm build
+
+# Start production server
+pnpm start
+```
+
+## Environment Variables
+
+| Variable       | Description           | Default       |
+| -------------- | --------------------- | ------------- |
+| `NODE_ENV`     | Environment           | `development` |
+| `PORT`         | Server port           | `4000`        |
+| `LOG_LEVEL`    | Logging level         | `info`        |
+| `DATABASE_URL` | PostgreSQL connection | Required      |

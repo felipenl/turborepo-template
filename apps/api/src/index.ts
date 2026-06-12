@@ -1,23 +1,46 @@
-import { createLogger, type LoggerOptions } from '@repo/observability';
-import type { Logger } from 'pino';
+import Fastify from 'fastify';
+import { createFastifyLogger } from '@repo/observability';
 import { env } from './config/environment.js';
+import { databasePlugin } from './plugins/database.js';
+import { errorHandlerPlugin } from './plugins/error-handler.js';
+import { healthRoutes } from './routes/health.js';
 
-export const logger: Logger = createLogger(
-  {
-    name: 'API',
-    fileName: 'api.log',
-    level: env.LOG_LEVEL,
-  },
-  {
-    defaultLevel: 'info',
-    daysToKeep: 30,
-  },
-);
+const logger = createFastifyLogger({
+  name: 'API',
+  level: env.LOG_LEVEL,
+});
 
-logger.info('🚀 API Server starting...');
-logger.info({ environment: env.NODE_ENV, port: env.PORT }, 'Configuration loaded');
+const app = Fastify({
+  logger,
+  requestIdLogLabel: 'reqId',
+  disableRequestLogging: false,
+});
 
-// TODO: Start your server here
-// Example: Express, Fastify, Hono, etc.
+// Plugins
+await app.register(databasePlugin);
+await app.register(errorHandlerPlugin);
 
-logger.info(`✅ API Server ready at http://${env.HOST}:${env.PORT}`);
+// Routes
+await app.register(healthRoutes, { prefix: '/health' });
+
+// Start server
+try {
+  await app.listen({
+    port: env.PORT,
+    host: '0.0.0.0',
+  });
+  app.log.info({ port: env.PORT, env: env.NODE_ENV }, '🚀 API Server running');
+} catch (err) {
+  app.log.error(err, 'Failed to start server');
+  process.exit(1);
+}
+
+// Graceful shutdown
+const signals = ['SIGINT', 'SIGTERM'];
+signals.forEach(signal => {
+  process.on(signal, async () => {
+    app.log.info(`Received ${signal}, closing server gracefully`);
+    await app.close();
+    process.exit(0);
+  });
+});

@@ -17,10 +17,15 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@repo/database": "workspace:*",
+    "@repo/errors": "workspace:*",
     "@repo/observability": "workspace:*",
+    "@repo/utils": "workspace:*",
     "dotenv": "^17.4.2",
-    "pino": "^9.7.0",
-    "zod": "^4.4.3"
+    "fastify": "^5.2.1",
+    "fastify-plugin": "^5.0.1",
+    "postgres": "^3.4.5",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
