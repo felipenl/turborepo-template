@@ -4,6 +4,7 @@ import { sendErrorResponse } from '../../error-utils.js';
 import { ResponseStatus } from '../../types.js';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace -- Required for Express Response augmentation
   namespace Express {
     interface Response {
       success: (data?: unknown, status?: number, message?: string) => void;

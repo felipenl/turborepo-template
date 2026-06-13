@@ -3,6 +3,7 @@ import { AuthError } from '@repo/errors';
 import { decodeToken } from '../../jwt/index.js';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace -- Required for Express Request augmentation
   namespace Express {
     interface Request {
       token?: unknown;

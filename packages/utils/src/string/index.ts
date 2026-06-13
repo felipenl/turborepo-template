@@ -17,9 +17,7 @@ export const capitalize = (str: string): string => {
 };
 
 export const camelCase = (str: string): string => {
-  return str
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
+  return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
 };
 
 export const snakeCase = (str: string): string => {

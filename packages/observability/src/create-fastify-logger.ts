@@ -18,6 +18,7 @@ interface FastifyLoggerOptions {
 const findMonorepoRoot = (startPath: string): string => {
   let currentPath = startPath;
   while (currentPath !== path.parse(currentPath).root) {
+    // eslint-disable-next-line no-sync -- Required for logger initialization at startup
     if (fs.existsSync(path.join(currentPath, 'pnpm-workspace.yaml'))) {
       return currentPath;
     }
@@ -31,9 +32,7 @@ const findMonorepoRoot = (startPath: string): string => {
  * Returns config object that Fastify can accept.
  * Logs are stored in monorepo root under logs/{name}/
  */
-export const createFastifyLogger = (
-  options: FastifyLoggerOptions,
-): boolean | PinoLoggerOptions => {
+export const createFastifyLogger = (options: FastifyLoggerOptions): boolean | PinoLoggerOptions => {
   const { name, level, logDir, fileName = `${name.toLowerCase()}.log` } = options;
 
   // Find monorepo root
@@ -44,7 +43,9 @@ export const createFastifyLogger = (
   const finalLogDir = logDir || path.join(monorepoRoot, 'logs', name.toLowerCase());
 
   // Ensure log directory exists
+  // eslint-disable-next-line no-sync -- Required for logger initialization at startup
   if (!fs.existsSync(finalLogDir)) {
+    // eslint-disable-next-line no-sync -- Required for logger initialization at startup
     fs.mkdirSync(finalLogDir, { recursive: true });
   }
 

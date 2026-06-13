@@ -14,7 +14,7 @@ interface TransportOptions {
 
 export const getConsoleTransport = (
   options: LoggerOptions,
-  defaultLevel: Level = 'info',
+  defaultLevel: Level = 'info'
 ): TransportOptions => {
   return {
     name: 'consoleTransport',
@@ -33,7 +33,7 @@ export const getConsoleTransport = (
 
 export const getFileTransport = (
   options: { path: string; level: Level },
-  daysToKeep: number = 7,
+  daysToKeep: number = 7
 ): TransportOptions => {
   return {
     name: 'fileTransport',
@@ -60,10 +60,7 @@ export interface CreateLoggerConfig {
   redactPaths?: string[];
 }
 
-export const createLogger = (
-  options: LoggerOptions,
-  config: CreateLoggerConfig = {},
-) => {
+export const createLogger = (options: LoggerOptions, config: CreateLoggerConfig = {}) => {
   const { daysToKeep = 7, defaultLevel = 'info', redactPaths = [] } = config;
   const params = resolveLogParams(options, defaultLevel);
 
@@ -75,7 +72,6 @@ export const createLogger = (
     },
 
     mixin: (_context, level) => {
-      // eslint-disable-next-line security/detect-object-injection
       return { type: pino.levels.labels[level]?.toUpperCase(), caller: getLogCaller(4) };
     },
 
@@ -99,7 +95,7 @@ export const createLogger = (
     },
 
     formatters: {
-      bindings: (bindings) => {
+      bindings: bindings => {
         return {
           pid: String(bindings.pid || ''),
           host: String(bindings.hostname || 'Unknown'),

@@ -50,7 +50,7 @@ export const createHttpLogger = (logger: Logger) => {
           ip: req.ip,
           event,
         },
-        message,
+        message
       );
     };
 

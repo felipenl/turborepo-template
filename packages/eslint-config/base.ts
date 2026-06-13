@@ -35,6 +35,10 @@ export const config: Linter.Config[] = [
         ...globals.browser,
         ...globals.node,
       },
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
   {

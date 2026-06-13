@@ -25,7 +25,7 @@ export const sendErrorResponse = (
   res: Response,
   err: Error,
   logger: Logger,
-  defaultStatus: number = 500,
+  defaultStatus: number = 500
 ): void => {
   const { statusCode, data } = extractErrorDetails(err, defaultStatus);
 

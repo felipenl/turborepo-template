@@ -6,11 +6,7 @@ export interface JwtConfig {
   expiresIn?: string | number;
 }
 
-export const generateToken = (
-  payload: object,
-  config: JwtConfig,
-  options: SignOptions = {},
-) => {
+export const generateToken = (payload: object, config: JwtConfig, options: SignOptions = {}) => {
   const { secret, expiresIn: defaultExpiresIn } = config;
 
   if (!secret) throw new Error("Missing 'secret' in JWT config");
@@ -26,7 +22,7 @@ export const generateToken = (
 
 export const decodeToken = (header: string, secret: string): JwtPayload => {
   if (!secret) {
-    throw new Error("Critical: Missing JWT secret");
+    throw new Error('Critical: Missing JWT secret');
   }
 
   const token = header.replace(/^Bearer\s+/i, '');
