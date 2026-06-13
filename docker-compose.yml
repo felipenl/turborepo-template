@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: docker.io/postgres:16-alpine
+    container_name: turborepo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: turborepo-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_started
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${API_PORT}
+      LOG_LEVEL: ${LOG_LEVEL}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    ports:
+      - '4000:4000'
+    volumes:
+      # Mount logs directory
+      - ./logs:/app/logs
+    networks:
+      - internal
+      - proxy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    container_name: turborepo-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${WEB_PORT}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+    ports:
+      - '3000:3000'
+    networks:
+      - proxy
+
+volumes:
+  postgres-data:
+
+networks:
+  # Internal network for database communication (no internet access)
+  internal:
+    driver: bridge
+    internal: true
+  # External network for internet-facing services
+  proxy:
+    driver: bridge
