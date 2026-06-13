@@ -78,9 +78,9 @@ After cloning, customize these files for your project:
 
 ### 2. Update Package Scopes (Optional)
 
-If you want to rename `@repo/*` to `@your-org/*`:
+If you want to rename `@workspace/*` to `@your-org/*`:
 
-1. Find and replace `@repo/` with `@your-org/` in:
+1. Find and replace `@workspace/` with `@your-org/` in:
    - All `package.json` files (in `packages/*` and `apps/*`)
    - All `import` statements in code
 

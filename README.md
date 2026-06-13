@@ -52,15 +52,15 @@ This monorepo is built with [Turborepo](https://turbo.build/repo) and includes a
 - **`api`**: Node.js backend API example with env validation
 
 **Packages:**
-- **`@repo/ui`**: Shared React component library
-- **`@repo/observability`**: Logging, metrics, and monitoring (Pino-based)
-- **`@repo/database`**: Drizzle ORM with extensible database clients (PostgreSQL ready)
-- **`@repo/errors`**: Custom error classes (CustomError, ResponseError, AuthError)
-- **`@repo/utils`**: Shared utilities (server middleware, JWT, string/date helpers)
-- **`@repo/eslint-config`**: ESLint configurations (base, backend, React, Next.js)
-- **`@repo/typescript-config`**: Shared TypeScript configurations
-- **`@repo/test-config`**: Vitest testing infrastructure
-- **`@repo/version-bump`**: Automated version management system
+- **`@workspace/ui`**: Shared React component library
+- **`@workspace/observability`**: Logging, metrics, and monitoring (Pino-based)
+- **`@workspace/database`**: Drizzle ORM with extensible database clients (PostgreSQL ready)
+- **`@workspace/errors`**: Custom error classes (CustomError, ResponseError, AuthError)
+- **`@workspace/utils`**: Shared utilities (server middleware, JWT, string/date helpers)
+- **`@workspace/eslint-config`**: ESLint configurations (base, backend, React, Next.js)
+- **`@workspace/typescript-config`**: Shared TypeScript configurations
+- **`@workspace/test-config`**: Vitest testing infrastructure
+- **`@workspace/version-bump`**: Automated version management system
 
 All apps/packages include TypeScript, ESLint, Prettier, and testing support.
 

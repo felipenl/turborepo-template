@@ -1,4 +1,4 @@
-# @repo/errors
+# @workspace/errors
 
 Custom error classes for the monorepo.
 
@@ -11,7 +11,7 @@ Custom error classes for the monorepo.
 ## Usage
 
 ```typescript
-import { CustomError, ResponseError, AuthError } from '@repo/errors';
+import { CustomError, ResponseError, AuthError } from '@workspace/errors';
 
 // Custom error
 throw new CustomError('ValidationError', 'Invalid input', 400, { field: 'email' });

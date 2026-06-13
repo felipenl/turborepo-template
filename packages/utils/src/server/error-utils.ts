@@ -1,6 +1,6 @@
 import { type Response } from 'express';
 import { type Logger } from 'pino';
-import { ResponseError } from '@repo/errors';
+import { ResponseError } from '@workspace/errors';
 import { ResponseStatus } from './types.js';
 
 export interface ErrorDetails {

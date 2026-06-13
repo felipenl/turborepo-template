@@ -1,5 +1,5 @@
 import type { FastifyInstance } from 'fastify';
-import { isProduction } from '@repo/utils/environment';
+import { isProduction } from '@workspace/utils/environment';
 
 export async function healthRoutes(fastify: FastifyInstance) {
   fastify.get('/', async (_request, reply) => {

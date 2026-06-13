@@ -1,4 +1,4 @@
-# `@repo/eslint-config`
+# `@workspace/eslint-config`
 
 This package contains shared ESLint configurations for the turborepo template monorepo.
 
@@ -18,7 +18,7 @@ A comprehensive ESLint configuration that includes:
 
 ```javascript
 // eslint.config.js
-import { config } from '@repo/eslint-config/base';
+import { config } from '@workspace/eslint-config/base';
 
 export default config;
 ```
@@ -36,7 +36,7 @@ Extends the base configuration with React-specific rules:
 
 ```javascript
 // eslint.config.js
-import { reactConfig } from '@repo/eslint-config/react';
+import { reactConfig } from '@workspace/eslint-config/react';
 
 export default reactConfig;
 ```
@@ -51,7 +51,7 @@ Shared Prettier configuration is also available:
 
 ```javascript
 // prettier.config.js
-import prettierConfig from '@repo/eslint-config/prettier.config';
+import prettierConfig from '@workspace/eslint-config/prettier.config';
 
 export default prettierConfig;
 ```

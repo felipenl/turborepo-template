@@ -5,8 +5,8 @@ Modern API built with Fastify, TypeScript, and Drizzle ORM.
 ## Stack
 
 - **Fastify**: Fast and low overhead web framework
-- **Drizzle ORM**: Type-safe database queries (@repo/database)
-- **Pino**: High-performance logging (@repo/observability)
+- **Drizzle ORM**: Type-safe database queries (@workspace/database)
+- **Pino**: High-performance logging (@workspace/observability)
 - **PostgreSQL**: Primary database
 - **Zod**: Schema validation
 - **TypeScript**: Type safety throughout
@@ -75,7 +75,7 @@ GET /health/ready
 
 ## Database
 
-This API uses `@repo/database` package with Drizzle ORM.
+This API uses `@workspace/database` package with Drizzle ORM.
 
 ### Add Tables
 
@@ -120,7 +120,7 @@ pnpm db:migrate
 ### Use in Routes
 
 ```typescript
-import { mainSchema } from '@repo/database/schemas/main';
+import { mainSchema } from '@workspace/database/schemas/main';
 
 // Query
 const users = await fastify.db.select().from(mainSchema.users);
@@ -131,10 +131,10 @@ const [user] = await fastify.db.insert(mainSchema.users).values({ email, name })
 
 ## Error Handling
 
-Uses `@repo/errors` custom error classes:
+Uses `@workspace/errors` custom error classes:
 
 ```typescript
-import { ResponseError, AuthError } from '@repo/errors';
+import { ResponseError, AuthError } from '@workspace/errors';
 
 // HTTP error
 throw new ResponseError('Not found', 404);
@@ -148,7 +148,7 @@ throw new ResponseError('Validation failed', 400, { field: 'email' });
 
 ## Logging
 
-Fastify uses Pino logger (from `@repo/observability`):
+Fastify uses Pino logger (from `@workspace/observability`):
 
 ```typescript
 fastify.log.info('Info message');

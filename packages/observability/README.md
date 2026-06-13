@@ -1,4 +1,4 @@
-# @repo/logger
+# @workspace/logger
 
 Production-ready logger built on [Pino](https://getpino.io/) with file rotation, console pretty-printing, and sensitive data redaction.
 
@@ -15,7 +15,7 @@ Production-ready logger built on [Pino](https://getpino.io/) with file rotation,
 ### Basic Logger
 
 ```typescript
-import { createLogger } from '@repo/logger';
+import { createLogger } from '@workspace/logger';
 
 const logger = createLogger({
   name: 'AppLogger',

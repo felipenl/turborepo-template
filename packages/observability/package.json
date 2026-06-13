@@ -1,5 +1,5 @@
 {
-  "name": "@repo/observability",
+  "name": "@workspace/observability",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -23,9 +23,9 @@
     "pino-roll": "^1.3.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/test-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/test-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
     "@types/node": "^25.9.2",
     "eslint": "^9.39.4",
     "typescript": "6.0.3",

@@ -1,5 +1,5 @@
 import jwt, { type JwtPayload, type SignOptions } from 'jsonwebtoken';
-import { AuthError } from '@repo/errors';
+import { AuthError } from '@workspace/errors';
 
 export interface JwtConfig {
   secret: string;

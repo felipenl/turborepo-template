@@ -1,4 +1,4 @@
-# @repo/test-config
+# @workspace/test-config
 
 Shared Vitest configuration for the monorepo.
 
@@ -8,7 +8,7 @@ In your package's `vitest.config.ts`:
 
 ```typescript
 import { mergeConfig } from 'vitest/config';
-import baseConfig from '@repo/test-config/vitest';
+import baseConfig from '@workspace/test-config/vitest';
 
 export default mergeConfig(baseConfig, {
   // Your package-specific overrides
@@ -21,7 +21,7 @@ export default mergeConfig(baseConfig, {
 Or use directly:
 
 ```typescript
-import vitestConfig from '@repo/test-config/vitest';
+import vitestConfig from '@workspace/test-config/vitest';
 export default vitestConfig;
 ```
 

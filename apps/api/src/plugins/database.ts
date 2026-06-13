@@ -1,7 +1,7 @@
 import type { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import fp from 'fastify-plugin';
-import { PostgresClient } from '@repo/database';
-import { mainSchema } from '@repo/database/schemas/main';
+import { PostgresClient } from '@workspace/database';
+import { mainSchema } from '@workspace/database/schemas/main';
 import { env } from '../config/environment.js';
 
 declare module 'fastify' {

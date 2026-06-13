@@ -1,5 +1,5 @@
 import Fastify from 'fastify';
-import { createFastifyLogger } from '@repo/observability';
+import { createFastifyLogger } from '@workspace/observability';
 import { env } from './config/environment.js';
 import { databasePlugin } from './plugins/database.js';
 import { errorHandlerPlugin } from './plugins/error-handler.js';

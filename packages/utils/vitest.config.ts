@@ -1,3 +1,3 @@
-import vitestConfig from '@repo/test-config/vitest';
+import vitestConfig from '@workspace/test-config/vitest';
 
 export default vitestConfig;

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/test-config",
+  "name": "@workspace/test-config",
   "version": "0.0.2",
   "private": true,
   "type": "module",

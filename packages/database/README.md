@@ -1,4 +1,4 @@
-# @repo/database
+# @workspace/database
 
 Framework-agnostic database package with Drizzle ORM. Extensible architecture for multiple database support.
 
@@ -14,7 +14,7 @@ Framework-agnostic database package with Drizzle ORM. Extensible architecture fo
 ## Installation
 
 ```bash
-pnpm add @repo/database
+pnpm add @workspace/database
 ```
 
 Install PostgreSQL driver:
@@ -28,8 +28,8 @@ pnpm add postgres
 ### PostgreSQL
 
 ```typescript
-import { PostgresClient } from '@repo/database';
-import { mainSchema } from '@repo/database/schemas/main';
+import { PostgresClient } from '@workspace/database';
+import { mainSchema } from '@workspace/database/schemas/main';
 
 const client = new PostgresClient(
   {
@@ -56,7 +56,7 @@ Extend the `DatabaseClient` base class to add support for other databases:
 
 ```typescript
 // packages/database/src/clients/mysql.ts
-import { DatabaseClient } from '@repo/database/clients/base';
+import { DatabaseClient } from '@workspace/database/clients/base';
 import { drizzle, type MySql2Database } from 'drizzle-orm/mysql2';
 import mysql from 'mysql2/promise';
 
@@ -175,16 +175,16 @@ export default {
 
 ```typescript
 // Main package
-import { PostgresClient, sql, eq } from '@repo/database';
+import { PostgresClient, sql, eq } from '@workspace/database';
 
 // Base class for custom clients
-import { DatabaseClient } from '@repo/database/clients/base';
+import { DatabaseClient } from '@workspace/database/clients/base';
 
 // Specific client
-import { PostgresClient } from '@repo/database/clients/postgres';
+import { PostgresClient } from '@workspace/database/clients/postgres';
 
 // Schema
-import { mainSchema } from '@repo/database/schemas/main';
+import { mainSchema } from '@workspace/database/schemas/main';
 ```
 
 ## Framework Examples
@@ -193,8 +193,8 @@ import { mainSchema } from '@repo/database/schemas/main';
 
 ```typescript
 import express from 'express';
-import { PostgresClient } from '@repo/database';
-import { mainSchema } from '@repo/database/schemas/main';
+import { PostgresClient } from '@workspace/database';
+import { mainSchema } from '@workspace/database/schemas/main';
 
 const app = express();
 
@@ -216,8 +216,8 @@ process.on('SIGTERM', async () => {
 
 ```typescript
 import { Hono } from 'hono';
-import { PostgresClient } from '@repo/database';
-import { mainSchema } from '@repo/database/schemas/main';
+import { PostgresClient } from '@workspace/database';
+import { mainSchema } from '@workspace/database/schemas/main';
 
 const app = new Hono();
 
@@ -235,8 +235,8 @@ app.get('/users', async c => {
 
 ```typescript
 import { Injectable, Module, OnModuleDestroy } from '@nestjs/common';
-import { PostgresClient } from '@repo/database';
-import { mainSchema } from '@repo/database/schemas/main';
+import { PostgresClient } from '@workspace/database';
+import { mainSchema } from '@workspace/database/schemas/main';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 @Injectable()

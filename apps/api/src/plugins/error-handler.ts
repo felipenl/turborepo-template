@@ -1,6 +1,6 @@
 import type { FastifyInstance, FastifyPluginOptions, FastifyError, FastifyReply } from 'fastify';
 import fp from 'fastify-plugin';
-import { ResponseError, AuthError } from '@repo/errors';
+import { ResponseError, AuthError } from '@workspace/errors';
 
 async function errorHandlerPlugin(fastify: FastifyInstance, _options: FastifyPluginOptions) {
   fastify.setErrorHandler((error: FastifyError, _request, reply: FastifyReply) => {

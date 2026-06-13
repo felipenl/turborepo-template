@@ -1,5 +1,5 @@
 {
-  "name": "@repo/errors",
+  "name": "@workspace/errors",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -15,8 +15,8 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
     "@types/node": "^25.9.2",
     "eslint": "^9.39.4",
     "typescript": "6.0.3"

@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { AuthError } from '@repo/errors';
+import { AuthError } from '@workspace/errors';
 import { decodeToken } from '../../jwt/index.js';
 
 declare global {
