@@ -32,6 +32,7 @@ try {
   app.log.info({ port: env.PORT, env: env.NODE_ENV }, '🚀 API Server running');
 } catch (err) {
   app.log.error(err, 'Failed to start server');
+  // eslint-disable-next-line no-process-exit -- Required for fatal startup failure
   process.exit(1);
 }
 
@@ -41,6 +42,7 @@ signals.forEach(signal => {
   process.on(signal, async () => {
     app.log.info(`Received ${signal}, closing server gracefully`);
     await app.close();
+    // eslint-disable-next-line no-process-exit -- Required for graceful shutdown
     process.exit(0);
   });
 });

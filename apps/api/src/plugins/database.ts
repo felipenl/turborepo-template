@@ -23,7 +23,7 @@ async function databasePlugin(fastify: FastifyInstance, _options: FastifyPluginO
         max: 10,
         ssl: env.NODE_ENV === 'production',
       },
-      mainSchema,
+      mainSchema
     );
 
     dbClient.connect();

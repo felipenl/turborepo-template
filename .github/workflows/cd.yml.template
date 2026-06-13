@@ -1,0 +1,239 @@
+# ====================
+# CD (Continuous Deployment) WORKFLOW TEMPLATE
+# ====================
+#
+# This is a TEMPLATE file. To enable automated deployments:
+#
+# 1. Rename this file to `cd.yml`
+# 2. Configure GitHub Secrets (Settings → Secrets → Actions):
+#    - DEPLOY_SSH_HOST: Your server IP or domain
+#    - DEPLOY_SSH_USER: SSH username (e.g., ubuntu, root)
+#    - DEPLOY_SSH_KEY: Private SSH key (entire content)
+#
+# 3. Update the deployment script below:
+#    - Change repository path on server
+#    - Update health check URLs
+#    - Customize deployment steps
+#
+# 4. Commit and push to main branch
+#
+# ====================
+
+name: CD - Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+    # Only deploy when relevant files change
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'docker-compose.yml'
+      - 'infrastructure/**'
+      - '.github/workflows/deploy.yml'
+
+  # Allow manual deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+        default: production
+
+jobs:
+  # ====================
+  # Pre-Deploy Validation
+  # ====================
+  validate:
+    name: Validate before deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm check-types
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+  # ====================
+  # Deploy to Server
+  # ====================
+  deploy:
+    name: Deploy to ${{ github.event.inputs.environment || 'production' }}
+    runs-on: ubuntu-latest
+    needs: validate
+
+    # Only deploy if validation passed
+    if: success()
+
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: https://yourdomain.com  # ⚠️ UPDATE THIS
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: 22
+          script: |
+            set -e  # Exit on error
+
+            # ========================================
+            # Configuration
+            # ========================================
+            PROJECT_DIR="$HOME/turborepo-app"  # ⚠️ UPDATE THIS
+            BACKUP_DIR="$HOME/backups"
+
+            # ========================================
+            # Pre-Deploy Checks
+            # ========================================
+            echo "🔍 Pre-deployment checks..."
+
+            # Check Docker is running
+            if ! docker info > /dev/null 2>&1; then
+              echo "❌ ERROR: Docker is not running"
+              exit 1
+            fi
+
+            # Create project directory if doesn't exist
+            if [ ! -d "$PROJECT_DIR" ]; then
+              echo "📁 Creating project directory..."
+              mkdir -p "$PROJECT_DIR"
+              cd "$PROJECT_DIR"
+              git clone https://github.com/${{ github.repository }}.git .
+            fi
+
+            cd "$PROJECT_DIR"
+
+            # Check .env exists
+            if [ ! -f .env ]; then
+              echo "❌ ERROR: .env file not found!"
+              echo "Please create .env file on the server with required variables."
+              exit 1
+            fi
+
+            # ========================================
+            # Backup Current State
+            # ========================================
+            echo "💾 Creating backup..."
+            mkdir -p "$BACKUP_DIR"
+            BACKUP_FILE="$BACKUP_DIR/backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+            docker compose config > "$BACKUP_DIR/docker-compose-$(date +%Y%m%d-%H%M%S).yml" || true
+
+            # ========================================
+            # Pull Latest Code
+            # ========================================
+            echo "📥 Pulling latest code..."
+
+            # Clean up any git locks
+            rm -f .git/index.lock
+
+            # Stash any local changes (shouldn't be any, but safe)
+            git stash || true
+
+            # Pull latest
+            git fetch origin main
+            git checkout main
+            git pull origin main
+
+            # ========================================
+            # Deploy New Version
+            # ========================================
+            echo "🚀 Deploying new version..."
+
+            # Pull latest base images
+            docker compose pull
+
+            # Build and restart services
+            docker compose build --no-cache
+            docker compose up -d --force-recreate
+
+            # ========================================
+            # Post-Deploy Validation
+            # ========================================
+            echo "✅ Verifying deployment..."
+
+            # Wait for services to start
+            sleep 10
+
+            # Check all containers are running
+            if ! docker compose ps | grep -q "Up"; then
+              echo "❌ ERROR: Some containers failed to start"
+              docker compose ps
+              docker compose logs --tail 50
+              exit 1
+            fi
+
+            # Health check API
+            # ⚠️ UPDATE WITH YOUR ACTUAL HEALTH CHECK URL
+            # if ! curl -f https://api.yourdomain.com/health > /dev/null 2>&1; then
+            #   echo "❌ WARNING: API health check failed"
+            #   echo "Check logs: docker compose logs api"
+            # fi
+
+            # Health check Web
+            # if ! curl -f https://yourdomain.com > /dev/null 2>&1; then
+            #   echo "❌ WARNING: Web health check failed"
+            #   echo "Check logs: docker compose logs web"
+            # fi
+
+            # ========================================
+            # Cleanup
+            # ========================================
+            echo "🧹 Cleaning up old images..."
+            docker image prune -f
+
+            # ========================================
+            # Summary
+            # ========================================
+            echo ""
+            echo "════════════════════════════════════════"
+            echo "✅ Deployment completed successfully!"
+            echo "════════════════════════════════════════"
+            echo ""
+            docker compose ps
+            echo ""
+            echo "📝 Logs: docker compose logs -f"
+            echo "🔄 Rollback: cd $PROJECT_DIR && git checkout <previous-commit> && docker compose up -d"
+            echo "💾 Backup: $BACKUP_FILE"
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ Deployment failed!"
+          echo "Check the logs above for details."
+          # Add notification here (Slack, Discord, email, etc.)

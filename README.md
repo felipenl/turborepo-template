@@ -1,23 +1,45 @@
 # Turborepo Template
 
-A production-ready monorepo template with automated development workflows, comprehensive linting, formatting, and version management.
+A production-ready full-stack monorepo template with Docker, Traefik reverse proxy, automatic SSL, and complete CI/CD infrastructure.
+
+**✨ Features:** TypeScript monorepo • Docker containerization • Auto SSL via Let's Encrypt • GitHub Actions CI/CD • Automated versioning
 
 ## Quick Start
 
+### Using This Template
+
+**Option 1: GitHub Template (Recommended)**
+1. Click "Use this template" button above
+2. Create your new repository
+3. Clone and follow setup below
+
+**Option 2: Manual Clone**
 ```bash
-# Clone the template
-git clone <your-repo-url> my-project
+git clone https://github.com/yourusername/turborepo-template.git my-project
 cd my-project
+rm -rf .git && git init
+```
 
-# Run setup script (optional)
-./setup.sh
+### Local Development Setup
 
+```bash
 # Install dependencies
 pnpm install
 
-# Start development
+# Create local environment file
+cp .env.local.example .env.local
+
+# Start development (no Docker needed)
 pnpm dev
+
+# Access:
+# - API: http://localhost:4000
+# - Web: http://localhost:3000
 ```
+
+### Production Deployment
+
+See **[📘 Using This Template Guide](./docs/using-this-template.md)** for complete setup instructions.
 
 ## Architecture
 
@@ -190,17 +212,44 @@ Each package follows consistent patterns:
 - [Test Config](./packages/test-config/README.md) - Vitest testing setup
 - [Version Bump Package](./packages/version-bump/README.md) - Version management utilities
 
-## Before Production
+## Production Infrastructure
 
-This template is development-ready. Before deploying to production, add:
+This template is **production-ready** with:
 
-- [ ] **Dockerfile** for each app (containerization)
-- [ ] **docker-compose.yml** (orchestration)
-- [ ] **Deployment pipeline** (deploy workflow in `.github/workflows/`)
-- [ ] **Environment secrets** (use secret management, not plain env vars)
-- [ ] **Monitoring** (APM, error tracking)
-- [ ] **Security hardening** (rate limiting, CSP headers, etc.)
-- [ ] **Database migrations** (if using a database)
-- [ ] **Health checks** (liveness/readiness endpoints)
+- ✅ **Docker**: Multi-stage builds for API and Web apps
+- ✅ **Traefik**: Reverse proxy with automatic Let's Encrypt SSL
+- ✅ **PostgreSQL**: Containerized database with health checks
+- ✅ **Network isolation**: Internal database network + public proxy network
+- ✅ **Non-root containers**: Security-hardened images
+- ✅ **Health checks**: Readiness probes for all services
+- ✅ **CI/CD**: Automated linting, testing, and type checking
 
-For a production-ready infrastructure setup with Docker, Traefik, monitoring, and security hardening, see our [Production Deployment Guide](./docs/production-deployment.md) (if available).
+### Deployment Options
+
+**Option 1: Docker Compose (Recommended for VPS)**
+```bash
+# Copy production env file
+cp .env.example .env
+nano .env  # Update domains and secrets
+
+# Create SSL cert storage
+touch infrastructure/traefik/acme/acme.json
+chmod 600 infrastructure/traefik/acme/acme.json
+
+# Start all services
+docker compose up -d
+```
+
+**Option 2: Cloud Platforms**
+- Dockerfiles work with: AWS ECS, Google Cloud Run, Azure Container Apps, Railway, Render
+
+See **[📘 Using This Template](./docs/using-this-template.md)** for complete deployment guide.
+
+## Documentation
+
+- **[Using This Template](./docs/using-this-template.md)** - Complete setup and deployment guide
+- **[Deployment Automation](./docs/deployment-automation.md)** - CI/CD setup with GitHub Actions
+- **[Environment Variables](./docs/environment-variables.md)** - Configuration guide
+- **[Version Bumping](./docs/VERSION_BUMPING.md)** - Automated version management
+- **[Testing](./TESTING.md)** - Local and production testing guide
+- **[Infrastructure](./infrastructure/README.md)** - Traefik and SSL configuration
