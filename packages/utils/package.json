@@ -1,5 +1,5 @@
 {
-  "name": "@repo/utils",
+  "name": "@workspace/utils",
   "version": "0.0.1",
   "type": "module",
   "private": true,
@@ -38,14 +38,15 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@repo/errors": "workspace:*",
-    "@repo/observability": "workspace:*",
+    "@workspace/errors": "workspace:*",
+    "@workspace/observability": "workspace:*",
+    "dotenv": "^17.4.2",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/test-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/test-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^25.9.2",

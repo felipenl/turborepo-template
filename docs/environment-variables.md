@@ -1,24 +1,29 @@
 # Environment Variables Guide
 
-## Hierarchy
+## Automatic Loading
 
-Environment variables are organized in a **three-tier hierarchy**:
+Environment variables are **automatically loaded** from `.env.[NODE_ENV]` file.
+
+### Simple Hierarchy
 
 ```
-┌─────────────────────────────────────────┐
-│  Root .env                               │  ← Shared (DB, APIs)
-│  (DATABASE_URL, OPENAI_API_KEY, etc.)   │
-└─────────────────────────────────────────┘
-           ↓ inherited by
-┌─────────────────────────────────────────┐
-│  App .env.local                          │  ← App-specific (PORT, JWT_SECRET)
-│  (Overrides root vars if needed)        │
-└─────────────────────────────────────────┘
-           ↓ result
-┌─────────────────────────────────────────┐
-│  Final Environment                       │  ← Merged in app
-└─────────────────────────────────────────┘
+(no NODE_ENV)        → loads .env.local
+NODE_ENV=development → loads .env.development
+NODE_ENV=production  → loads .env.production
+NODE_ENV=test        → loads .env.test
 ```
+
+One file per environment. Simple.
+
+### Usage in Apps
+
+```typescript
+import { loadEnv } from '@workspace/utils/environment';
+
+loadEnv(); // Automatically loads .env.{NODE_ENV}
+```
+
+Already configured in `apps/api/src/config/environment.ts`.
 
 ### What Goes Where
 

@@ -1,14 +1,8 @@
-import { config } from 'dotenv';
-import { z } from 'zod';
+import { loadEnv } from '@workspace/utils/environment';
+import { envSchema } from '../schemas/env.schema.js';
 
-config();
-
-const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  PORT: z.coerce.number().int().positive().default(4000),
-  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
-  DATABASE_URL: z.string().url().optional(),
-});
+// Load environment-specific file: .env.local (default), .env.development, .env.production, or .env.test
+loadEnv();
 
 const parsed = envSchema.safeParse(process.env);
 
