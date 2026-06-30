@@ -25,12 +25,13 @@
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "check-types": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:generate": "tsx scripts/drizzle-wrapper.ts generate",
+    "db:migrate": "tsx scripts/drizzle-wrapper.ts migrate",
+    "db:push": "tsx scripts/drizzle-wrapper.ts push",
+    "db:studio": "tsx scripts/drizzle-wrapper.ts studio"
   },
   "dependencies": {
+    "@workspace/observability": "workspace:*",
     "drizzle-orm": "^0.38.3"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/node": "^25.9.2",
     "drizzle-kit": "^0.30.1",
     "eslint": "^9.39.4",
+    "tsx": "^4.22.4",
     "typescript": "6.0.3"
   },
   "peerDependencies": {

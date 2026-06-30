@@ -156,19 +156,58 @@ pnpm db:push
 pnpm db:studio
 ```
 
-Configure in `drizzle.config.ts`:
+Configure in `drizzle.config.ts` (exports default `main` database for backwards compatibility).
+
+### Multi-Database Support
+
+For projects with multiple databases, use the registry pattern:
+
+1. Create new config in `src/config/databases/<name>.config.ts`:
 
 ```typescript
 import type { Config } from 'drizzle-kit';
 
-export default {
-  schema: './src/schemas/main/index.ts',
-  out: './drizzle',
+export const analyticsConfig: Config = {
+  schema: './src/schemas/analytics/index.ts',
+  out: './drizzle/analytics',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL || 'postgresql://localhost:5432/mydb',
+    url: process.env.ANALYTICS_DB_URL || 'postgresql://localhost:5432/analytics',
   },
-} satisfies Config;
+} as const;
+```
+
+2. Register in `src/config/drizzle.constants.ts`:
+
+```typescript
+export const DATABASE_NAMES: readonly DatabaseName[] = ['main', 'analytics'] as const;
+```
+
+3. Add to registry in `src/config/index.ts`:
+
+```typescript
+import { analyticsConfig } from './databases/analytics.config.js';
+
+export const databases: DrizzleConfigRegistry = {
+  main: mainConfig,
+  analytics: analyticsConfig,
+} as const;
+```
+
+4. Use in migrations:
+
+```typescript
+import { getConfig } from '@workspace/database';
+
+// Get specific database config
+const analyticsConfig = getConfig('analytics');
+```
+
+Or run Drizzle Kit commands per-database:
+
+```bash
+pnpm drizzle-kit generate --config=src/config/databases/analytics.config.ts
+pnpm drizzle-kit migrate --config=src/config/databases/analytics.config.ts
 ```
 
 ## Subpath Exports

@@ -1,10 +1,9 @@
-import type { Config } from 'drizzle-kit';
-
-export default {
-  schema: './src/schemas/main/index.ts',
-  out: './drizzle',
-  dialect: 'postgresql',
-  dbCredentials: {
-    url: process.env.DATABASE_URL || 'postgresql://localhost:5432/mydb',
-  },
-} satisfies Config;
+/**
+ * Drizzle Kit configuration
+ *
+ * Exports default config for backwards compatibility.
+ * For multi-database support, use: pnpm drizzle-kit <command> --config=src/config/databases/<name>.config.ts
+ *
+ * Or use the wrapper (if implemented): pnpm db:generate <database-name>
+ */
+export { default } from './src/config/index.js';
